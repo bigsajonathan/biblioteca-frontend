@@ -1,0 +1,61 @@
+<mat-card>
+    <mat-card-content>
+        <form [formRoot]="reservaForm.$form">
+            <mat-form-field>
+                <mat-label>Cliente</mat-label>
+                <mat-select [formField]="reservaForm.$form.cliente">
+                    @for (cli of $clientes(); track cli.idCliente) {
+                        <mat-option [value]="cli">{{cli.nombresCliente}} {{cli.apellidosCliente}}</mat-option>
+                    }
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field>
+                <mat-label>Fecha de reserva</mat-label>
+                <input matInput [matDatepicker]="picker" [min]="minDate" [formField]="reservaForm.$form.fechaReserva">
+                <mat-hint>DD/MM/YYYY</mat-hint>
+                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field>
+                <mat-label>Libro</mat-label>
+                <input matInput placeholder="Buscar por título" [matAutocomplete]="autoLibro" [formField]="reservaForm.$form.libro" />
+                <mat-autocomplete #autoLibro="matAutocomplete" [displayWith]="showLibro">
+                    @for (libro of $librosFiltrados(); track libro.idLibro) {
+                        <mat-option [value]="libro">{{libro.tituloLibro}} - {{libro.autorLibro}}</mat-option>
+                    }
+                </mat-autocomplete>
+            </mat-form-field>
+
+            <button mat-flat-button type="button" (click)="agregarLibro()">
+                <span>Agregar libro</span>
+                <mat-icon>add</mat-icon>
+            </button>
+
+            <mat-list role="list">
+                @for (libro of $librosSeleccionados(); track libro.idLibro) {
+                    <mat-list-item>
+                        {{ $index + 1 }}. {{ libro.tituloLibro }} - {{ libro.autorLibro }}
+                        <button mat-flat-button class="cancel-button" type="button" (click)="quitarLibro($index)">Quitar</button>
+                    </mat-list-item>
+                }
+                @empty {
+                    <p>No se ha agregado ningún libro todavía.</p>
+                }
+            </mat-list>
+        </form>
+    </mat-card-content>
+
+    <mat-card-actions align="end">
+        <button mat-flat-button type="button" [disabled]="!$puedeGuardar()" (click)="guardar()">
+            <span>Guardar</span>
+            <mat-icon>done</mat-icon>
+        </button>
+
+        <button mat-flat-button type="button" class="cancel-button" (click)="cancelar()">
+            <span>Cancelar</span>
+            <mat-icon>cancel</mat-icon>
+        </button>
+    </mat-card-actions>
+</mat-card>

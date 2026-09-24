@@ -1,0 +1,57 @@
+<mat-form-field>
+  <mat-label>Filtrar por cliente</mat-label>
+  <mat-select [value]="$clienteFiltro()" (selectionChange)="filtrarPorCliente($event.value)">
+    <mat-option [value]="null">Todos</mat-option>
+    @for (cli of $clientes(); track cli.idCliente) {
+      <mat-option [value]="cli.idCliente">{{cli.nombresCliente}} {{cli.apellidosCliente}}</mat-option>
+    }
+  </mat-select>
+</mat-form-field>
+
+<div class="mat-shadow-2">
+  <table mat-table [dataSource]="dataSource" matSort>
+
+    <ng-container matColumnDef="idReserva">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> ID </th>
+      <td mat-cell *matCellDef="let row"> {{row.idReserva}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="fechaReserva">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> FECHA </th>
+      <td mat-cell *matCellDef="let row"> {{row.fechaReserva}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="cliente">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> CLIENTE </th>
+      <td mat-cell *matCellDef="let row"> {{row.cliente.nombresCliente}} {{row.cliente.apellidosCliente}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="libros">
+      <th mat-header-cell *matHeaderCellDef> LIBROS </th>
+      <td mat-cell *matCellDef="let row"> {{librosDeReserva(row)}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef> ACCIONES </th>
+      <td mat-cell *matCellDef="let row">
+        <button mat-flat-button class="cancel-button" (click)="delete(row.idReserva)">
+          <span>Eliminar</span>
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell" colspan="5">No hay reservas.</td>
+    </tr>
+  </table>
+
+  <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Seleccionar página de reservas"></mat-paginator>
+
+  <button mat-fab style="float: right;" (click)="nuevaReserva()">
+    <mat-icon>add</mat-icon>
+  </button>
+</div>

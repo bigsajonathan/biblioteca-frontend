@@ -1,0 +1,9 @@
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+mat-list-item button {
+    margin-left: 12px;
+}

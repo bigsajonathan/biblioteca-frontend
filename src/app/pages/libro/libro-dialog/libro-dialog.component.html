@@ -1,0 +1,63 @@
+<h2 mat-dialog-title>{{ $isEdit() ? 'Editar libro' : 'Nuevo libro' }}</h2>
+
+<form [formRoot]="libroForm.$form" (submit)="operate()">
+    <mat-dialog-content class="example-container">
+        <div [hidden]="true">
+            <mat-form-field>
+                <mat-label>ID</mat-label>
+                <input matInput placeholder="ID" [formField]="libroForm.$form.idLibro"/>
+            </mat-form-field>
+        </div>
+
+        <mat-form-field>
+            <mat-label>TÍTULO</mat-label>
+            <input matInput placeholder="Título" [formField]="libroForm.$form.tituloLibro"/>
+            @if (libroForm.$form.tituloLibro().errors().some(error => error.kind === 'required') && libroForm.$form.tituloLibro().touched()) {
+                <small class="invalid">Es requerido</small>
+            }
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>AUTOR</mat-label>
+            <input matInput placeholder="Autor" [formField]="libroForm.$form.autorLibro"/>
+            @if (libroForm.$form.autorLibro().errors().some(error => error.kind === 'required') && libroForm.$form.autorLibro().touched()) {
+                <small class="invalid">Es requerido</small>
+            }
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>ISBN</mat-label>
+            <input matInput placeholder="ISBN" [formField]="libroForm.$form.isbnLibro"/>
+            @if (libroForm.$form.isbnLibro().errors().some(error => error.kind === 'required') && libroForm.$form.isbnLibro().touched()) {
+                <small class="invalid">Es requerido</small>
+            }
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>CATEGORÍA</mat-label>
+            <mat-select [formField]="libroForm.$form.categoria" [compareWith]="compareCategorias">
+                @for (cat of $categorias(); track cat.idCategoria) {
+                    <mat-option [value]="cat">{{cat.nombreCategoria}}</mat-option>
+                }
+            </mat-select>
+        </mat-form-field>
+
+        <mat-slide-toggle
+            [checked]="libroForm.$model().disponibleLibro"
+            (change)="libroForm.$model.update(m => ({...m, disponibleLibro: $event.checked}))">
+            Disponible
+        </mat-slide-toggle>
+    </mat-dialog-content>
+
+    <mat-dialog-actions align="end">
+        <button mat-flat-button type="submit" [disabled]="libroForm.isInvalid()">
+            <span>Guardar</span>
+            <mat-icon>done</mat-icon>
+        </button>
+
+        <button mat-flat-button type="button" class="cancel-button" (click)="cancel()">
+            <span>Cancelar</span>
+            <mat-icon>cancel</mat-icon>
+        </button>
+    </mat-dialog-actions>
+</form>

@@ -1,0 +1,32 @@
+<div class="example-container">
+    <mat-toolbar class="example-toolbar">
+        <button mat-icon-button (click)="sidenav.toggle()">
+            @if (!sidenav.opened) {
+                <mat-icon>menu</mat-icon>
+            }@else {
+                <mat-icon>close</mat-icon>
+            }
+        </button>
+
+        <span>BIBLIOTECA</span>
+    </mat-toolbar>
+
+    <mat-sidenav-container class="example-sidenav-container">
+        <mat-sidenav #sidenav style="width: 250px" mode="side" opened>
+
+            @for (item of navItems; track item.url) {
+                <button class="myButton" [routerLinkActive]="['active']" mat-menu-item
+                    [routerLink]="item.url">
+                    <mat-icon>{{ item.icon }}</mat-icon>
+                    <span>{{ item.name }}</span>
+                </button>
+                <mat-divider></mat-divider>
+            }
+        </mat-sidenav>
+
+        <mat-sidenav-content>
+            <router-outlet></router-outlet>
+        </mat-sidenav-content>
+
+    </mat-sidenav-container>
+</div>
